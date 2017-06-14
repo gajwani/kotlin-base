@@ -1,0 +1,87 @@
+buildscript {
+
+	ext.kotlinVersion        = '1.1.2-5'
+	ext.junitPlatformVersion = '1.0.0-M4'
+	ext.junitJupiterVersion  = '5.0.0-M4'
+	ext.junitVintageVersion  = '4.12.0-M4'
+	ext.junit4Version        = '4.12'
+	ext.spekVersion          = '1.1.2'
+	ext.log4jVersion         = '2.6.2'
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath "org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven { url "http://dl.bintray.com/jetbrains/spek" }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+// Would be needed to create a JAR
+//jar {
+//	baseName = 'project-name'
+//	version = '1.0.0-SNAPSHOT'
+//}
+
+compileTestJava {
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	options.compilerArgs += '-parameters'
+}
+
+mainClassName = 'com.example.project.Calculator2Kt'
+
+junitPlatform {
+	filters {
+		engines {}
+		tags { exclude 'slow' }
+	}
+}
+
+// Currently doesn't work, but would like to see better logging
+// test {
+//   testLogging { events 'started', 'passed' }
+// }
+
+dependencies {
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+	compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+
+	testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+
+	// For support of legacy JUnit 3 and 4 tests
+	testCompile("junit:junit:${junit4Version}")
+	testRuntime("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}")
+
+	testRuntime("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+	testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
+
+	testCompile("org.jetbrains.spek:spek-api:${spekVersion}") {
+		// exclude kotlin from spek, so that we can use the newest version
+		exclude group: 'org.jetbrains.kotlin'
+	}
+	testRuntime("org.jetbrains.spek:spek-junit-platform-engine:${spekVersion}") {
+		// exclude junit and kotlin from the engine, so we can use our own versions
+		exclude group: 'org.junit.platform'
+		exclude group: 'org.jetbrains.kotlin'
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.5'
+}
