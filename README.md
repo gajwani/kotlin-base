@@ -30,7 +30,7 @@ Kotlin developers.
 - [X] Include Gradle wrapper
 - [X] Include sample code in default directories
 - [ ] Test run report
-- [ ] Run individual tests in IntelliJ with keyboard shortcuts
-- [ ] Spring
-- [ ] Spring integration tests
+- [ ] (In progress, refer to [here](https://github.com/raniejade/spek-idea-plugin/pull/41) for more information) Run individual tests in IntelliJ with keyboard shortcuts
+- [X] Spring
+- [X] Spring integration tests
 - [ ] Include notes on how to JARify projects
