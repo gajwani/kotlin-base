@@ -1,5 +1,6 @@
 package com.example.project;
 
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,7 @@ class SpringIntegrationTest {
     private lateinit var context: WebApplicationContext
 
     @Test
+    @DisplayName("the context loads successfully and is able to execute a request")
     fun contextLoads() {
         val client = MockMvcBuilders.webAppContextSetup(context).build()
 
